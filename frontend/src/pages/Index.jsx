@@ -1,7 +1,11 @@
 import { AiFillPlusSquare } from "react-icons/ai";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import TodoList from "../components/todoList";
+import axios from "axios";
+import { useState } from "react";
+
 const Index = () => {
+	const [value, setValue] = useState("");
 	return (
 		<>
 			<main className="flex flex-col w-full h-fit bg-[#f1f4f5] p-6">
@@ -13,8 +17,25 @@ const Index = () => {
 						name="add-new"
 						id="addNew"
 						className=" mr-4 h-full px-6 flex-[9]"
+						value={value}
+						onChange={(e) => setValue(e.target.value)}
 					/>
-					<AiFillPlusSquare className="w-full h-full flex-1 text-[#3983f0] rounded-lg p-0 m-0 cursor-pointer" />
+					<AiFillPlusSquare
+						onClick={async () => {
+							try {
+								await axios.post(`http://localhost:3000/todo`, {
+									text: value,
+								});
+								setValue("");
+							} catch (error) {
+								console.log(
+									"error while inserting data",
+									error
+								);
+							}
+						}}
+						className="w-full h-full flex-1 text-[#3983f0] rounded-lg p-0 m-0 cursor-pointer"
+					/>
 				</div>
 				<div className=" flex justify-between items-center my-3">
 					<div className=" flex justify-evenly gap-x-4">

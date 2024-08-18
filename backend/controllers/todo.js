@@ -19,7 +19,7 @@ exports.postTodo = (req, res, next) => {
 		.catch((err) => {
 			console.log("error while inserting a new todo", err);
 		});
-	res.end();
+		res.end();
 };
 
 exports.putTodo = async (req, res, next) => {
