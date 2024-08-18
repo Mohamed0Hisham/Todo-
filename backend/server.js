@@ -1,15 +1,15 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const todoRoutes = require("./routes/todo");
+const cors = require('cors')
 
 const PORT = 3000;
+
 const app = express();
 app.use(express.json());
+app.use(cors())
 
 app.use("/todo", todoRoutes);
-app.get('cz',(req,res,nex)=>{
-    res.re
-})
 mongoose
 	.connect("mongodb://localhost:27017/TodoApp")
 	.then((res) => {

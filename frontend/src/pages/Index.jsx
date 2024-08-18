@@ -45,7 +45,10 @@ const Index = () => {
 					</div>
 				</div>
 				<div className="list">
-					<div className="todos">
+					<div className=" flex flex-col">
+						<h2 className="text-center text-2xl font-bold mb-2">
+							Your Targets
+						</h2>
 						<TodoList />
 					</div>
 				</div>
