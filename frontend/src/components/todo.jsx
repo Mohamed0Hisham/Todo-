@@ -6,12 +6,14 @@ import { FaToggleOff } from "react-icons/fa6";
 import axios from "axios";
 
 const Todo = (props) => {
-	const { text, isCompleted, id } = props;
+	const { text, isCompleted, id, index } = props;
 	const [completed, setCompleted] = useState(isCompleted);
 	return (
 		<>
+			<span className="mr-2">{`${index + 1} ) `}</span>
 			<span className="flex-[8]">
-				<span className={completed ? "line-through text-green-400":''}>
+				<span
+					className={completed ? "line-through text-green-400" : ""}>
 					{text}
 				</span>
 			</span>

@@ -25,6 +25,7 @@ const TodoList = () => {
 							text={todo.text}
 							isCompleted={todo.completed}
 							id={todo._id}
+							index={index}
 						/>
 					</div>
 				);
