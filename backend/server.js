@@ -4,14 +4,16 @@ const todoRoutes = require("./routes/todo");
 
 const PORT = 3000;
 const app = express();
-
+app.use(express.json());
 
 app.use("/todo", todoRoutes);
-
+app.get('cz',(req,res,nex)=>{
+    res.re
+})
 mongoose
 	.connect("mongodb://localhost:27017/TodoApp")
 	.then((res) => {
-        app.listen(PORT)
+		app.listen(PORT);
 		console.log(`Server started at port ${PORT}`);
 	})
 	.catch((err) => {
