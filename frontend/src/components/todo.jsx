@@ -11,7 +11,7 @@ const Todo = (props) => {
 	return (
 		<>
 			<span className="flex-[8]">
-				<span className={completed && "line-through text-green-400"}>
+				<span className={completed ? "line-through text-green-400":''}>
 					{text}
 				</span>
 			</span>
