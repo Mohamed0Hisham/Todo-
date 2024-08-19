@@ -5,6 +5,13 @@ exports.getTodo = async (req, res, next) => {
 	const allTodos = await Todo.find();
 	res.json(allTodos);
 };
+exports.getSearchResult = async (req, res, next) => {
+	const target = req.body.search;
+	console.log(target);
+	
+	const allTodos = await Todo.find({text:target},);
+	res.json(allTodos);
+};
 exports.postTodo = (req, res, next) => {
 	const text = req.body.text;
 	const newObject = new Todo({

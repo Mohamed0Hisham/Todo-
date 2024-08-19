@@ -18,9 +18,9 @@ const Todo = (props) => {
 					{text}
 				</span>
 			</span>
-			<div className="flex-[2] flex justify-evenly text-lg">
+			<div className="flex-[2] flex justify-evenly text-lg items-center">
 				<span
-					className="toggle text-xl text-[#3983f0] cursor-pointer"
+					className="toggle text-3xl tex text-[#3983f0] cursor-pointer"
 					onClick={async () => {
 						await axios.put(`http://localhost:3000/todo/${id}`, {
 							completed: !isCompleted,

@@ -3,9 +3,28 @@ import { FaMagnifyingGlass } from "react-icons/fa6";
 import TodoList from "../components/todoList";
 import axios from "axios";
 import { useState } from "react";
+import SearchList from "../components/searchList";
 
 const Index = () => {
 	const [value, setValue] = useState("");
+
+	const [search, setsearch] = useState("");
+	const [searchData, setsearchData] = useState([]);
+	
+	const fetchResults = async (target) => {
+		const { data } = await axios.get(`http://localhost:3000/todo`);
+		const searchResult = await data.filter((match) => {
+			return target && match && match.text.toLowerCase().includes(target);
+		});
+		console.log(searchResult);
+		setsearchData(searchResult)
+	};
+
+	const handleSearch = (target) => {
+		setsearch(target);
+		fetchResults(target);
+	};
+
 	return (
 		<>
 			<main className="flex flex-col w-full h-fit bg-[#f1f4f5] p-6">
@@ -64,14 +83,43 @@ const Index = () => {
 						</button>
 					</div>
 					<div className=" flex justify-evenly items-center gap-x-4 h-8">
-						<input
-							type="search"
-							name="search"
-							id="search"
-							placeholder="     search for a todo"
-							className=" px-1 py-1"
+						<span className="relative">
+							<input
+								type="search"
+								name="search"
+								id="search"
+								placeholder="     search for a todo"
+								className=" px-1 py-1"
+								value={search}
+								onChange={(e) => handleSearch(e.target.value)}
+							/>
+							<ul className=" absolute w-full rounded-lg bg-slate-200 bg-opacity-70 list-none p-1 text-center text-xl font-semibold">
+								{searchData.map((res,index) => {
+									return (
+											<SearchList key={index} index={index} text={res.text}/>
+									);
+								})}
+							</ul>
+						</span>
+						<FaMagnifyingGlass
+							onClick={async () => {
+								try {
+									const { data } = await axios.get(
+										`http://localhost:3000/todo/search`,
+										{
+											search: search,
+										}
+									);
+									setsearchData(data);
+								} catch (error) {
+									console.log(
+										"error while inserting data",
+										error
+									);
+								}
+							}}
+							className=" bg-[#3983f0] h-full w-full p-1 rounded text-white cursor-pointer"
 						/>
-						<FaMagnifyingGlass className=" bg-[#3983f0] h-full w-full p-1 rounded text-white cursor-pointer" />
 					</div>
 				</div>
 				<div className="list">
