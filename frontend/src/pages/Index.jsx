@@ -48,6 +48,15 @@ const Index = () => {
 							<option value="inProgress">In progress</option>
 						</select>
 						<button
+							onClick={async () => {
+								try {
+									await axios.put(
+										"http://localhost:3000/todo/all_clear"
+									);
+								} catch (error) {
+									console.log("error while updating", error);
+								}
+							}}
 							name="mark-all-completed"
 							className="bg-[#a855ee] text-white px-1 py-1 rounded-lg">
 							{" "}

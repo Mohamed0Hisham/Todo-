@@ -13,7 +13,7 @@ const TodoList = () => {
 				console.log("error while fetching data", error);
 			}
 		})();
-	}, [data]);
+	});
 	return (
 		<>
 			{data.map((todo, index) => {

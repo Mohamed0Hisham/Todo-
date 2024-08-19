@@ -19,7 +19,7 @@ exports.postTodo = (req, res, next) => {
 		.catch((err) => {
 			console.log("error while inserting a new todo", err);
 		});
-		res.end();
+	res.end();
 };
 
 exports.putTodo = async (req, res, next) => {
@@ -40,6 +40,19 @@ exports.putTodo = async (req, res, next) => {
 		text: text,
 		completed: isCompleted,
 	});
+	res.end();
+};
+exports.putAllTodo = async (req, res, next) => {
+	console.log("ready to update all");
+
+	try {
+		const x = await Todo.updateMany(
+			{},
+			{ $set: { completed: true } }
+		);
+	} catch (error) {
+		console.log("error while marking all completed", error);
+	}
 	res.end();
 };
 

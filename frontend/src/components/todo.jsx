@@ -1,4 +1,4 @@
-import { useState } from "react";
+/* eslint-disable react/prop-types */
 import { FaTrashAlt } from "react-icons/fa";
 import { FaCheck } from "react-icons/fa";
 import { FaToggleOn } from "react-icons/fa6";
@@ -7,23 +7,26 @@ import axios from "axios";
 
 const Todo = (props) => {
 	const { text, isCompleted, id, index } = props;
-	const [completed, setCompleted] = useState(isCompleted);
 	return (
 		<>
 			<span className="mr-2">{`${index + 1} ) `}</span>
 			<span className="flex-[8]">
 				<span
-					className={completed ? "line-through text-green-400" : ""}>
+					className={
+						isCompleted ? "line-through text-green-400" : ""
+					}>
 					{text}
 				</span>
 			</span>
 			<div className="flex-[2] flex justify-evenly text-lg">
 				<span
 					className="toggle text-xl text-[#3983f0] cursor-pointer"
-					onClick={() => {
-						setCompleted(!completed);
+					onClick={async () => {
+						await axios.put(`http://localhost:3000/todo/${id}`, {
+							completed: !isCompleted,
+						});
 					}}>
-					{completed ? <FaToggleOn /> : <FaToggleOff />}
+					{isCompleted ? <FaToggleOn /> : <FaToggleOff />}
 				</span>
 				<FaTrashAlt
 					onClick={() => {
@@ -40,8 +43,10 @@ const Todo = (props) => {
 					className="text-red-500 cursor-pointer"
 				/>
 				<FaCheck
-					onClick={() => {
-						setCompleted(true);
+					onClick={async () => {
+						await axios.put(`http://localhost:3000/todo/${id}`, {
+							completed: true,
+						});
 					}}
 					className="text-green-400 cursor-pointer"
 				/>
