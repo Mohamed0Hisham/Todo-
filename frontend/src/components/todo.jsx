@@ -8,6 +8,35 @@ import { playClick } from "../assets/clickEffect.js";
 const Todo = (props) => {
 	const { text, isCompleted, id, index } = props;
 
+	const checkMark = async () => {
+		try {
+			playClick();
+			await axios.put(`http://localhost:3000/todo/${id}`, {
+				completed: true,
+			});
+		} catch (error) {
+			console.log("error :", error);
+		}
+	};
+	const trashTodo = () => {
+		(async () => {
+			try {
+				playClick();
+				await axios.delete(`http://localhost:3000/todo/${id}`);
+			} catch (error) {
+				console.log("error while deleting:", error);
+			}
+		})();
+	};
+	const toggleTodo = async () => {
+		try {
+			await axios.put(`http://localhost:3000/todo/${id}`, {
+				completed: !isCompleted,
+			});
+		} catch (error) {
+			console.log("error while trashing", error);
+		}
+	};
 	return (
 		<>
 			<span className="mr-2">{`${index + 1} ) `}</span>
@@ -22,42 +51,15 @@ const Todo = (props) => {
 			<div className="flex-[2] flex justify-evenly text-lg items-center">
 				<span
 					className="toggle text-3xl tex text-[#3983f0] cursor-pointer"
-					onClick={async () => {
-						await axios.put(`http://localhost:3000/todo/${id}`, {
-							completed: !isCompleted,
-						});
-					}}>
+					onClick={toggleTodo}>
 					{isCompleted ? <FaToggleOn /> : <FaToggleOff />}
 				</span>
 				<FaTrashAlt
-					onClick={() => {
-						(async () => {
-							try {
-								playClick();
-								await axios.delete(
-									`http://localhost:3000/todo/${id}`
-								);
-							} catch (error) {
-								console.log("error while deleting:", error);
-							}
-						})();
-					}}
+					onClick={trashTodo}
 					className="text-red-500 cursor-pointer"
 				/>
 				<FaCheck
-					onClick={async () => {
-						try {
-							playClick();
-							await axios.put(
-								`http://localhost:3000/todo/${id}`,
-								{
-									completed: true,
-								}
-							);
-						} catch (error) {
-							console.log("error :", error);
-						}
-					}}
+					onClick={checkMark}
 					className="text-green-400 cursor-pointer"
 				/>
 			</div>

@@ -8,7 +8,7 @@ const TodoList = ({ display }) => {
 
 	useEffect(() => {
 		(async () => {
-			try {				
+			try {
 				switch (display) {
 					case "completed":
 						{
@@ -37,7 +37,7 @@ const TodoList = ({ display }) => {
 				console.log("error while fetching data", error);
 			}
 		})();
-	},[data,display]);
+	}, [data, display]);
 	return (
 		<>
 			{data.map((todo, index) => {

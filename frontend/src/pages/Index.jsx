@@ -2,16 +2,20 @@ import { AiFillPlusSquare } from "react-icons/ai";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import TodoList from "../components/todoList";
 import axios from "axios";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import SearchList from "../components/searchList";
 
 // importing audio files
 import { playClick } from "../assets/clickEffect.js";
+
+// add key functionality
+import useEnter from "../assets/enterTodo.jsx";
+
 const Index = () => {
 	const [value, setValue] = useState("");
-
 	const [search, setsearch] = useState("");
 	const [searchData, setsearchData] = useState([]);
+	const [display, setDisplay] = useState("default");
 
 	const fetchResults = async (target) => {
 		const { data } = await axios.get(`http://localhost:3000/todo`);
@@ -20,14 +24,44 @@ const Index = () => {
 		});
 		setsearchData(searchResult);
 	};
-
 	const handleSearch = (target) => {
 		setsearch(target);
 		fetchResults(target);
 	};
 
 	// filtering todos
-	const [display, setDisplay] = useState("default");
+	const enterTodo = async () => {
+		try {
+			playClick();
+			await axios.post(`http://localhost:3000/todo`, {
+				text: value,
+			});
+			setValue("");
+		} catch (error) {
+			console.log("error while inserting data", error);
+		}
+	};
+
+	const searchTodo = async () => {
+		try {
+			playClick();
+			const { data } = await axios.get(
+				`http://localhost:3000/todo/search`,
+				{
+					search: search,
+				}
+			);
+			setsearchData(data);
+		} catch (error) {
+			console.log("error while inserting data", error);
+		}
+	};
+	const enterRef = useRef();
+	const searchRef = useRef();
+
+	// keyboard functionality
+	useEnter(enterRef, enterTodo);
+	useEnter(searchRef, searchTodo);
 	return (
 		<>
 			<main className="flex flex-col w-full h-fit bg-[#f1f4f5] p-6">
@@ -43,42 +77,21 @@ const Index = () => {
 						onChange={(e) => setValue(e.target.value)}
 					/>
 					<AiFillPlusSquare
-						onClick={async () => {
-							try {
-								playClick();
-								await axios.post(`http://localhost:3000/todo`, {
-									text: value,
-								});
-								setValue("");
-							} catch (error) {
-								console.log(
-									"error while inserting data",
-									error
-								);
-							}
-						}}
+						refX={enterRef}
+						onClick={enterTodo}
 						className="w-full h-full flex-1 text-[#3983f0] rounded-lg p-0 m-0 cursor-pointer"
 					/>
 				</div>
 				<div className=" flex justify-between items-center my-3">
 					<div className=" flex justify-evenly gap-x-4">
 						<select
-						onClick={(e) => setDisplay(e.target.value)}
+							onClick={(e) => setDisplay(e.target.value)}
 							name="type"
 							id="type"
 							className=" px-2 cursor-pointer">
-							<option
-								value="default">
-								Default
-							</option>
-							<option
-								value="completed">
-								Completed
-							</option>
-							<option
-								value="inProgress">
-								In progress
-							</option>
+							<option value="default">Default</option>
+							<option value="completed">Completed</option>
+							<option value="inProgress">In progress</option>
 						</select>
 						<button
 							onClick={async () => {
@@ -120,23 +133,8 @@ const Index = () => {
 							</ul>
 						</span>
 						<FaMagnifyingGlass
-							onClick={async () => {
-								try {
-									playClick();
-									const { data } = await axios.get(
-										`http://localhost:3000/todo/search`,
-										{
-											search: search,
-										}
-									);
-									setsearchData(data);
-								} catch (error) {
-									console.log(
-										"error while inserting data",
-										error
-									);
-								}
-							}}
+							refX={searchRef}
+							onClick={searchTodo}
 							className=" bg-[#3983f0] h-full w-full p-1 rounded text-white cursor-pointer"
 						/>
 					</div>
