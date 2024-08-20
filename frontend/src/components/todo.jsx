@@ -4,9 +4,10 @@ import { FaCheck } from "react-icons/fa";
 import { FaToggleOn } from "react-icons/fa6";
 import { FaToggleOff } from "react-icons/fa6";
 import axios from "axios";
-
+import { playClick } from "../assets/clickEffect.js";
 const Todo = (props) => {
 	const { text, isCompleted, id, index } = props;
+
 	return (
 		<>
 			<span className="mr-2">{`${index + 1} ) `}</span>
@@ -32,6 +33,7 @@ const Todo = (props) => {
 					onClick={() => {
 						(async () => {
 							try {
+								playClick();
 								await axios.delete(
 									`http://localhost:3000/todo/${id}`
 								);
@@ -44,9 +46,17 @@ const Todo = (props) => {
 				/>
 				<FaCheck
 					onClick={async () => {
-						await axios.put(`http://localhost:3000/todo/${id}`, {
-							completed: true,
-						});
+						try {
+							playClick();
+							await axios.put(
+								`http://localhost:3000/todo/${id}`,
+								{
+									completed: true,
+								}
+							);
+						} catch (error) {
+							console.log("error :", error);
+						}
 					}}
 					className="text-green-400 cursor-pointer"
 				/>

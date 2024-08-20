@@ -5,19 +5,21 @@ import axios from "axios";
 import { useState } from "react";
 import SearchList from "../components/searchList";
 
+// importing audio files
+import { playClick } from "../assets/clickEffect.js";
 const Index = () => {
 	const [value, setValue] = useState("");
 
 	const [search, setsearch] = useState("");
 	const [searchData, setsearchData] = useState([]);
-	
+
 	const fetchResults = async (target) => {
 		const { data } = await axios.get(`http://localhost:3000/todo`);
 		const searchResult = await data.filter((match) => {
 			return target && match && match.text.toLowerCase().includes(target);
 		});
 		console.log(searchResult);
-		setsearchData(searchResult)
+		setsearchData(searchResult);
 	};
 
 	const handleSearch = (target) => {
@@ -42,6 +44,7 @@ const Index = () => {
 					<AiFillPlusSquare
 						onClick={async () => {
 							try {
+								playClick();
 								await axios.post(`http://localhost:3000/todo`, {
 									text: value,
 								});
@@ -94,9 +97,13 @@ const Index = () => {
 								onChange={(e) => handleSearch(e.target.value)}
 							/>
 							<ul className=" absolute w-full rounded-lg bg-slate-200 bg-opacity-70 list-none p-1 text-center text-xl font-semibold">
-								{searchData.map((res,index) => {
+								{searchData.map((res, index) => {
 									return (
-											<SearchList key={index} index={index} text={res.text}/>
+										<SearchList
+											key={index}
+											index={index}
+											text={res.text}
+										/>
 									);
 								})}
 							</ul>
@@ -104,6 +111,7 @@ const Index = () => {
 						<FaMagnifyingGlass
 							onClick={async () => {
 								try {
+									playClick();
 									const { data } = await axios.get(
 										`http://localhost:3000/todo/search`,
 										{
