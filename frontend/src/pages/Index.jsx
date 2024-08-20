@@ -18,7 +18,6 @@ const Index = () => {
 		const searchResult = await data.filter((match) => {
 			return target && match && match.text.toLowerCase().includes(target);
 		});
-		console.log(searchResult);
 		setsearchData(searchResult);
 	};
 
@@ -27,6 +26,8 @@ const Index = () => {
 		fetchResults(target);
 	};
 
+	// filtering todos
+	const [display, setDisplay] = useState("default");
 	return (
 		<>
 			<main className="flex flex-col w-full h-fit bg-[#f1f4f5] p-6">
@@ -62,12 +63,22 @@ const Index = () => {
 				<div className=" flex justify-between items-center my-3">
 					<div className=" flex justify-evenly gap-x-4">
 						<select
+						onClick={(e) => setDisplay(e.target.value)}
 							name="type"
 							id="type"
 							className=" px-2 cursor-pointer">
-							<option value="default">Default</option>
-							<option value="completed">Completed</option>
-							<option value="inProgress">In progress</option>
+							<option
+								value="default">
+								Default
+							</option>
+							<option
+								value="completed">
+								Completed
+							</option>
+							<option
+								value="inProgress">
+								In progress
+							</option>
 						</select>
 						<button
 							onClick={async () => {
@@ -135,7 +146,7 @@ const Index = () => {
 						<h2 className="text-center text-2xl font-bold mb-2">
 							Your Targets
 						</h2>
-						<TodoList />
+						<TodoList display={display} />
 					</div>
 				</div>
 			</main>

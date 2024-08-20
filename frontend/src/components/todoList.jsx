@@ -1,19 +1,43 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import Todo from "./todo";
 import axios from "axios";
 
-const TodoList = () => {
+const TodoList = ({ display }) => {
 	const [data, setData] = useState([]);
+
 	useEffect(() => {
 		(async () => {
-			try {
-				const { data } = await axios.get("http://localhost:3000/todo");
-				setData(data);
+			try {				
+				switch (display) {
+					case "completed":
+						{
+							const { data } = await axios.get(
+								"http://localhost:3000/todo/completed"
+							);
+							setData(data);
+						}
+						break;
+					case "inProgress":
+						{
+							const { data } = await axios.get(
+								"http://localhost:3000/todo/not_completed"
+							);
+							setData(data);
+						}
+						break;
+					default: {
+						const { data } = await axios.get(
+							"http://localhost:3000/todo"
+						);
+						setData(data);
+					}
+				}
 			} catch (error) {
 				console.log("error while fetching data", error);
 			}
 		})();
-	});
+	},[data,display]);
 	return (
 		<>
 			{data.map((todo, index) => {

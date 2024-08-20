@@ -7,9 +7,15 @@ exports.getTodo = async (req, res, next) => {
 };
 exports.getSearchResult = async (req, res, next) => {
 	const target = req.body.search;
-	console.log(target);
-	
-	const allTodos = await Todo.find({text:target},);
+	const allTodos = await Todo.find({ text: target });
+	res.json(allTodos);
+};
+exports.getCompletedTodo = async (req, res, next) => {
+	const allTodos = await Todo.find({ completed: true });
+	res.json(allTodos);
+};
+exports.getNotCompletedTodo = async (req, res, next) => {
+	const allTodos = await Todo.find({ completed: false });
 	res.json(allTodos);
 };
 exports.postTodo = (req, res, next) => {
@@ -53,10 +59,7 @@ exports.putAllTodo = async (req, res, next) => {
 	console.log("ready to update all");
 
 	try {
-		const x = await Todo.updateMany(
-			{},
-			{ $set: { completed: true } }
-		);
+		const x = await Todo.updateMany({}, { $set: { completed: true } });
 	} catch (error) {
 		console.log("error while marking all completed", error);
 	}
